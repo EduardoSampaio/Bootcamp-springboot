@@ -6,6 +6,7 @@ import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.services.exceptions.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,8 +20,8 @@ public class CategoryService {
         this.repository = repository;
     }
 
-    public Page<CategoryDto> findAllPaged(PageRequest pageRequest) {
-        var list = repository.findAll(pageRequest);
+    public Page<CategoryDto> findAllPaged(Pageable pageable) {
+        var list = repository.findAll(pageable);
         return list.map(x -> new CategoryDto(x.getId(), x.getName()));
     }
 

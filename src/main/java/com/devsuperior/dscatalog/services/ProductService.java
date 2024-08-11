@@ -7,8 +7,10 @@ import com.devsuperior.dscatalog.entities.Product;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,8 +27,8 @@ public class ProductService {
 		this.repository = repository;
 	}
 
-	public Page<ProductDto> findAllPaged(PageRequest pageRequest) {
-        Page<Product> list = repository.findAll(pageRequest);
+	public Page<ProductDto> findAllPaged(Pageable pageable) {
+        Page<Product> list = repository.findAll(pageable);
         return list.map(x -> new ProductDto(x));
     }
 
@@ -49,7 +51,10 @@ public class ProductService {
         repository.save(entity);
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws ResourceNotFoundException {
+        if(!repository.existsById(id)){
+            throw new ResourceNotFoundException("Entity not found");
+        }
         repository.deleteById(id);
     }
 

@@ -4,8 +4,7 @@ import com.devsuperior.dscatalog.dto.CategoryDto;
 import com.devsuperior.dscatalog.services.CategoryService;
 import com.devsuperior.dscatalog.services.exceptions.EntityNotFoundException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,16 +22,9 @@ public class CategoryResource {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CategoryDto>> findAll(
-            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
-            @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-            @RequestParam(value = "orderBy", defaultValue = "name") String orderBy)
+    public ResponseEntity<Page<CategoryDto>> findAll(Pageable pageable)
     {
-
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.Direction.valueOf(direction), orderBy);
-        var list = service.findAllPaged(pageRequest);
-
+        var list = service.findAllPaged(pageable);
         return ResponseEntity.ok().body(list);
     }
 
