@@ -6,10 +6,9 @@ import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
+import com.devsuperior.dscatalog.services.exceptions.EntityNotFoundException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +28,10 @@ public class ProductService {
 
 	public Page<ProductDto> findAllPaged(Pageable pageable) {
         Page<Product> list = repository.findAll(pageable);
-        return list.map(x -> new ProductDto(x));
+        return list.map(ProductDto::new);
     }
 
-    public ProductDto findById(Long id) {
+    public ProductDto findById(Long id) throws ResourceNotFoundException {
         Optional<Product> obj = repository.findById(id);
         Product entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
         return new ProductDto(entity, entity.getCategories());

@@ -2,6 +2,7 @@ package com.devsuperior.dscatalog.resources;
 
 import com.devsuperior.dscatalog.dto.ProductDto;
 import com.devsuperior.dscatalog.services.ProductService;
+import com.devsuperior.dscatalog.services.exceptions.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class ProductResource {
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<ProductDto> findById(@PathVariable Long id) {
+	public ResponseEntity<ProductDto> findById(@PathVariable Long id) throws EntityNotFoundException {
 		ProductDto dto = service.findById(id);
 		return ResponseEntity.ok().body(dto);
 	}
