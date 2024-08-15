@@ -40,8 +40,6 @@ public class ProductServiceIT {
 
     @Test
     public void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExists() {
-        assertThrows(ResourceNotFoundException.class, () ->{
-            productService.delete(nonExistingId);
-        });
+        assertThrows(ResourceNotFoundException.class, () -> productService.delete(nonExistingId));
     }
 }
